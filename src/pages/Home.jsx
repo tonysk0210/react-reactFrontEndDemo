@@ -1,16 +1,19 @@
 import MovieCard from "../components/MovieCard";
 import { useState, useEffect } from "react";
-import { searchMovies, getPopularMovies } from "../services/api";
+import { searchMovies, getPopularMovies } from "../services/api"; // 引入從 api.js 定義的函式來獲取電影資料
 import "../css/Home.css";
 
 function Home() {
   // useState 用來管理搜尋關鍵字、電影列表、錯誤訊息和載入狀態
   const [searchQuery, setSearchQuery] = useState(""); // 搜尋輸入的文字
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState([]); // 存儲從 API 獲取的電影資料
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // 用來表示是否正在載入資料
 
+  // useEffect 用來在組件掛載時獲取熱門電影資料，並在搜尋時更新電影列表
+  // react 會先去確認 useEffect 的依賴陣列，如果是空的，就只會在組件首次掛載時執行一次，才會呼叫 loadPopularMovies 函式來獲取熱門電影資料·
   useEffect(() => {
+    // 1. 定義一個異步函式來獲取熱門電影資料，並處理載入狀態和錯誤
     const loadPopularMovies = async () => {
       try {
         const popularMovies = await getPopularMovies();
@@ -23,8 +26,8 @@ function Home() {
       }
     };
 
-    loadPopularMovies();
-  }, []);
+    loadPopularMovies(); // 2. 呼叫函式來獲取熱門電影資料
+  }, []); // 空依賴陣列表示這個 useEffect 只會在組件首次掛載時執行一次
 
   const handleSearch = async (e) => {
     e.preventDefault(); // 阻止表單提交的默認行為
