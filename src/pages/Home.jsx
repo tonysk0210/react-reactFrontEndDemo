@@ -7,7 +7,7 @@ function Home() {
   // useState 用來管理搜尋關鍵字、電影列表、錯誤訊息和載入狀態
   const [searchQuery, setSearchQuery] = useState(""); // 搜尋輸入的文字
   const [movies, setMovies] = useState([]); // 存儲從 API 獲取的電影資料
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(null); // 用來存儲錯誤訊息，如果獲取資料失敗會顯示這個訊息
   const [loading, setLoading] = useState(true); // 用來表示是否正在載入資料
 
   // useEffect 用來在組件掛載時獲取熱門電影資料，並在搜尋時更新電影列表
@@ -17,12 +17,12 @@ function Home() {
     const loadPopularMovies = async () => {
       try {
         const popularMovies = await getPopularMovies();
-        setMovies(popularMovies);
+        setMovies(popularMovies); // a. 將獲取到的熱門電影資料存儲到 movies 狀態中，這樣組件就會重新渲染並顯示這些電影
       } catch (err) {
         console.log(err);
-        setError("Failed to load movies...");
+        setError("Failed to load movies..."); // b. 如果獲取資料失敗，將錯誤訊息存儲到 error 狀態中，這樣組件就會顯示這個錯誤訊息
       } finally {
-        setLoading(false);
+        setLoading(false); // c. 無論獲取資料成功還是失敗，都將載入狀態設置為 false，這樣組件就會停止顯示載入中的提示
       }
     };
 
