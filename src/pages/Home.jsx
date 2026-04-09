@@ -29,21 +29,22 @@ function Home() {
     loadPopularMovies(); // 2. 呼叫函式來獲取熱門電影資料
   }, []); // 空依賴陣列表示這個 useEffect 只會在組件首次掛載時執行一次
 
+  // handleSearch 函式用來處理搜尋表單的提交事件，從 API 獲取搜尋結果並更新電影列表
   const handleSearch = async (e) => {
     e.preventDefault(); // 阻止表單提交的默認行為
-    if (!searchQuery.trim()) return;
-    if (loading) return;
+    if (!searchQuery.trim()) return; // 如果搜尋輸入為空，則不進行搜尋
+    if (loading) return; // 如果正在載入資料，則不進行搜尋
 
-    setLoading(true);
+    setLoading(true); // 在開始搜尋之前將載入狀態設置為 true，這樣組件就會顯示載入中的提示
     try {
       const searchResults = await searchMovies(searchQuery);
-      setMovies(searchResults);
+      setMovies(searchResults); // a. 將獲取到的搜尋結果存儲到 movies 狀態中，這樣組件就會重新渲染並顯示這些電影
       setError(null);
     } catch (err) {
       console.log(err);
-      setError("Failed to search movies...");
+      setError("Failed to search movies..."); // b. 如果獲取資料失敗，將錯誤訊息存儲到 error 狀態中，這樣組件就會顯示這個錯誤訊息
     } finally {
-      setLoading(false);
+      setLoading(false); // c. 無論獲取資料成功還是失敗，都將載入狀態設置為 false，這樣組件就會停止顯示載入中的提示
     }
   };
 
@@ -63,8 +64,10 @@ function Home() {
         </button>
       </form>
 
+      {/* 這裡是錯誤訊息的區域，如果 error 狀態有值，就會顯示這個錯誤訊息 */}
       {error && <div className="error-message">{error}</div>}
 
+      {/* 這裡是根據載入狀態來顯示不同的內容，如果正在載入就顯示 Loading...，否則顯示電影列表 */}
       {loading ? (
         <div className="loading">Loading...</div>
       ) : (
